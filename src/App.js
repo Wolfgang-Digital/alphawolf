@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Menu, ProtectedRoute } from './components';
-import { Login } from './views';
+import { ProtectedRoute } from './components';
+import { Login, Home } from './views';
 import { Posts } from './views/awarewolf';
 
 const REDIRECT_TIMEOUT = 1000 * 2;
@@ -13,18 +13,18 @@ class App extends Component {
 
   componentDidMount() {
     const user = document.cookie.split(';')
-      .find(n => n.includes('alphawolf='));
-    
+      .find(n => n.includes('wolfganger='));
+
     if (user) {
       this.setState({
-        user: JSON.parse(user.replace('alphawolf=', ''))
+        user: JSON.parse(user.replace('wolfganger=', ''))
       });
     }
   }
 
   userLogin = user => {
     this.setState({ user });
-    document.cookie = `alphawolf=${JSON.stringify(user)};`;
+    document.cookie = `wolfganger=${JSON.stringify(user)};`;
   };
 
   userLogout = () => {
@@ -38,28 +38,27 @@ class App extends Component {
 
   render() {
     const { user } = this.state;
+    const isAuthorised = this.isValidUser(user);
 
     return (
       <Router>
-        <>
+        <Switch>
           <Route
-            path='/'
-            render={() => this.isValidUser(user) && <Menu />}
+            exact path='/'
+            render={() =>
+              isAuthorised ?
+                <Home user={user} userLogout={this.userLogout} /> :
+                <Login userLogin={this.userLogin} />
+            }
           />
-          <Switch>
-            <Route
-              exact path='/'
-              render={() => <Login userLogin={this.userLogin} />}
-            />
-            <ProtectedRoute
-              path='/manage-posts'
-              component={() => <Posts user={user} />}
-              isAuthorised={this.isValidUser(user)}
-              redirectTo='/'
-              timeout={REDIRECT_TIMEOUT}
-            />
-          </Switch>
-        </>
+          <ProtectedRoute
+            path='/manage-posts'
+            component={() => <Posts user={user} />}
+            isAuthorised={isAuthorised}
+            redirectTo='/'
+            timeout={REDIRECT_TIMEOUT}
+          />
+        </Switch>
       </Router>
     );
   }

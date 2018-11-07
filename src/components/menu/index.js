@@ -10,74 +10,14 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  AppBar,
+  Toolbar,
+  Typography
 } from '@material-ui/core';
-import { ChevronRight, ChevronLeft, Forum, BarChart, ExitToApp } from '@material-ui/icons';
-
-const SIDEBAR_WIDTH = 240;
-
-const styles = theme => ({
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: SIDEBAR_WIDTH,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    '& div, span': {
-      color: theme.palette.light
-    }
-  },
-  paper: {
-    background: theme.palette.dark
-  },
-  drawerOpen: {
-    width: SIDEBAR_WIDTH,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-    border: 'none'
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    border: 'none',
-    width: theme.spacing.unit * 7 + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing.unit * 9 + 1,
-    }
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-    background: theme.palette.primary.main
-  },
-  list: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    '& > div, a > div': {
-      '&:hover': {
-        background: theme.palette.secondary.main
-      }
-    }
-  },
-  logout: {
-    marginTop: 'auto'
-  }
-});
+import { ChevronLeft, Forum, BarChart, ExitToApp } from '@material-ui/icons';
+import MenuIcon from '@material-ui/icons/Menu';
+import styles from './styles';
 
 class Menu extends React.Component {
   state = {
@@ -90,48 +30,65 @@ class Menu extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { open } = this.state;
 
     return (
-      <Drawer
-        variant='permanent'
-        className={classNames(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open
-        })}
-        classes={{
-          paper: classNames(classes.paper, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open
-          })
-        }}
-        open={this.state.open}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={open ? this.closeMenu : this.openMenu}>
-            {open ? <ChevronLeft /> : <ChevronRight />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List className={classes.list}>
-          <Link to='/manage-posts'>
+      <div className={classes.root}>
+        <AppBar
+          position="absolute"
+          className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+        >
+          <Toolbar disableGutters={!this.state.open}>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.openMenu}
+              className={classNames(classes.menuButton, this.state.open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h5" color="inherit" noWrap>
+              Wolfgang Digital Dashboard
+          </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+          }}
+          open={this.state.open}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={this.closeMenu}>
+              <ChevronLeft />
+            </IconButton>
+          </div>
+          <Divider />
+          <List className={classes.list}>
+            <Link to='/manage-posts'>
+              <ListItem button>
+                <ListItemIcon><Forum /></ListItemIcon>
+                <ListItemText primary='Manage Posts' />
+              </ListItem>
+            </Link>
+            <Link to='/'>
+              <ListItem button>
+                <ListItemIcon><BarChart /></ListItemIcon>
+                <ListItemText primary='Survey Results' />
+              </ListItem>
+            </Link>
+            <Divider className={classes.pushBottom}/>
             <ListItem button>
-              <ListItemIcon><Forum /></ListItemIcon>
-              <ListItemText primary='Manage Posts' />
+              <ListItemIcon><ExitToApp /></ListItemIcon>
+              <ListItemText primary='Logout' />
             </ListItem>
-          </Link>
-          <Link to='/'>
-            <ListItem button>
-              <ListItemIcon><BarChart /></ListItemIcon>
-              <ListItemText primary='Survey Results' />
-            </ListItem>
-          </Link>
-          <ListItem button className={classes.logout}>
-            <ListItemIcon><ExitToApp /></ListItemIcon>
-            <ListItemText primary='Logout' />
-          </ListItem>
-        </List>
-      </Drawer>
+          </List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          {this.props.children}
+        </main>
+      </div>
     );
   }
 }

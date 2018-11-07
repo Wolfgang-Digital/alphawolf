@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withSnackbar } from 'notistack';
 import { awarewolfAPI, errorHandler } from '../../../utils';
 import { Button } from '@material-ui/core';
+import { Menu } from '../../../components';
 
 const TIMEOUT = 1000 * 5;
 
@@ -49,9 +50,9 @@ class Posts extends Component {
 
   render() {
     return (
-      <>
+      <Menu>
         {this.state.posts.map((n, i) => <li key={i}>{n.title}</li>)}
-      </>
+      </Menu>
     );
   }
 }
