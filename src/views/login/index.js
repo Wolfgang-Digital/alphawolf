@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LoginForm from './LoginForm';
-import { awarewolfAPI } from '../../utils';
+import { awarewolfAPI, errorHandler } from '../../utils';
+import { withSnackbar } from 'notistack';
+import { Button } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+
+const TIMEOUT = 1000 * 30;
+
+const snackbarOptions = {
+  variant: 'error',
+  anchorOrigin: {
+    horizontal: 'right',
+    vertical: 'top'
+  },
+  autoHideDuration: 2000,
+  action: <Button size="small">Dismiss</Button>
+};
 
 class Login extends Component {
   state = {
     email: '',
     password: '',
-    loading: false,
-    success: false
+    loading: false
   };
 
   handleChange = name => e => {
@@ -17,18 +31,35 @@ class Login extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { email, password } = this.state;
-    awarewolfAPI.login({ email, password })
-      .then(res => {
-        if (res.success) {
-          this.props.userLogin(res.data);
-        } else {
+    const { email, password, loading } = this.state;
+    const { enqueueSnackbar, userLogin, history } = this.props;
 
+    if (!loading) {
+      this.setState({ loading: true, error: '' }, async () => {
+
+        this.timer = setTimeout(() => {
+          this.setState({ loading: false });
+          enqueueSnackbar('Connection timeout.', snackbarOptions);
+        }, TIMEOUT);
+
+        const res = await awarewolfAPI.login({ email, password });
+
+        clearTimeout(this.timer);
+        this.setState({ loading: false });
+
+        if (res.success) {
+          if (res.data.roles.includes('admin')) {
+            userLogin(res.data);
+            history.push('/manage-posts');
+          } else {
+            enqueueSnackbar('Unauthorised access.', snackbarOptions);
+          }
+        } else {
+          const error = errorHandler.parseServerMessage(res.messages);
+          enqueueSnackbar(error, snackbarOptions);
         }
-      })
-      .catch(err => {
-        console.log(err);
       });
+    }
   };
 
   componentWillUnmount() {
@@ -36,20 +67,22 @@ class Login extends Component {
   }
 
   render() {
-    const { email, password } = this.state;
+    const { email, password, loading } = this.state;
     return (
       <LoginForm
         email={email}
         password={password}
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
+        loading={loading}
       />
     );
   }
 }
 
 Login.propTypes = {
-  userLogin: PropTypes.func.isRequired
+  userLogin: PropTypes.func.isRequired,
+  enqueueSnackbar: PropTypes.func.isRequired
 };
 
-export default Login;
+export default withRouter(withSnackbar(Login));

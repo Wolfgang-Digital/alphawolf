@@ -3,10 +3,29 @@ import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { withSnackbar } from 'notistack';
+import { Button } from '@material-ui/core';
 
-const styles = theme => ({
+const snackbarOptions = {
+  variant: 'warning',
+  anchorOrigin: {
+    horizontal: 'right',
+    vertical: 'top'
+  },
+  autoHideDuration: 2000,
+  action: <Button size="small">Dismiss</Button>
+};
+
+const styles = () => ({
+  wrapper: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   progress: {
-    margin: 'auto',
+    margin: 'auto'
   }
 });
 
@@ -17,25 +36,27 @@ class ProtectedRoute extends Component {
 
   componentDidMount() {
     if (this.props.timeout) {
-      this.timerId = setTimeout(() => {
+      this.timer = setTimeout(() => {
         this.setState({ timedOut: true });
-        this.timerId = 0;
+        this.timer = 0;
+        if (!this.props.isAuthorised) this.props.enqueueSnackbar('You must be logged in to view this page.', snackbarOptions);
       }, this.props.timeout);
     }
   }
 
   componentWillUnmount() {
-    if (this.timerId) {
-      clearTimeout(this.timerId);
-      this.timerId = 0;
-    }
+    clearTimeout(this.timer);
   }
 
   render() {
     const { component: Component, redirectTo, isAuthorised, timeout, classes, ...rest } = this.props;
     
     if (!isAuthorised && timeout && !this.state.timedOut) {
-      return <CircularProgress className={classes.progress} />
+      return (
+        <div className={classes.wrapper}>
+          <CircularProgress size={48} className={classes.progress} />
+        </div>
+      );
     }
 
     return (
@@ -62,4 +83,4 @@ ProtectedRoute.propTypes = {
   timeout: PropTypes.number
 };
 
-export default withStyles(styles)(ProtectedRoute);
+export default withStyles(styles)(withSnackbar(ProtectedRoute));

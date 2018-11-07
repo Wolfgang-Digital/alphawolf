@@ -1,7 +1,7 @@
-import SidebarMenu from './sidebar-menu';
+import Menu from './menu';
 import ProtectedRoute from './protected-route';
 
 export {
-  SidebarMenu,
+  Menu,
   ProtectedRoute
 };

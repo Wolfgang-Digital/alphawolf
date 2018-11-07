@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
 
 const theme = createMuiTheme({
   typography: {
@@ -16,14 +17,18 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#bf3da7'
-    }
+    },
+    light: '#fafafa',
+    dark: '#333'
   }
 });
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <CssBaseline />
-    <App />
+    <SnackbarProvider maxSnack={3}>
+      <App />
+    </SnackbarProvider>
   </MuiThemeProvider>, 
   document.getElementById('root')
 );

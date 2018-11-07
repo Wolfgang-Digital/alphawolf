@@ -7,7 +7,8 @@ import {
   Input,
   InputLabel,
   Paper,
-  Typography
+  Typography,
+  CircularProgress
 } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -41,62 +42,80 @@ const styles = theme => ({
   },
   submit: {
     marginTop: theme.spacing.unit * 3
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative'
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '90%'
   }
 });
 
-const LoginForm = ({ email, password, handleChange, handleSubmit, classes }) => (
-  <main className={classes.layout}>
-    <Paper className={classes.paper}>
-      <Avatar className={classes.avatar}>
-        <LockIcon />
-      </Avatar>
-      <Typography component='h1' variant='h5'>
-        Login
-      </Typography>
-      <form className={classes.form}>
-        <FormControl margin='normal' required fullWidth>
-          <InputLabel htmlFor='email'>Email</InputLabel>
-          <Input 
-            id='email' 
-            name='email' 
-            autoComplete='email' 
-            autoFocus
-            value={email}
-            onChange={handleChange('email')} 
-          />
-        </FormControl>
-        <FormControl margin='normal' required fullWidth>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <Input
-            name="password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={handleChange('password')} 
-          />
-        </FormControl>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={handleSubmit}
-        >
+const LoginForm = props => {
+  const { email, password, handleChange, handleSubmit, loading, classes } = props;
+
+  return (
+    <main className={classes.layout}>
+      <Paper className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockIcon />
+        </Avatar>
+        <Typography component='h1' variant='h5'>
           Login
-        </Button>
-      </form>
-    </Paper>
-  </main>
-);
+        </Typography>
+        <form className={classes.form}>
+          <FormControl margin='normal' required fullWidth>
+            <InputLabel htmlFor='email'>Email</InputLabel>
+            <Input
+              id='email'
+              name='email'
+              autoComplete='email'
+              autoFocus
+              value={email}
+              onChange={handleChange('email')}
+            />
+          </FormControl>
+          <FormControl margin='normal' required fullWidth>
+            <InputLabel htmlFor='password'>Password</InputLabel>
+            <Input
+              name='password'
+              type='password'
+              id='password'
+              autoComplete='current-password'
+              value={password}
+              onChange={handleChange('password')}
+            />
+          </FormControl>
+          <div className={classes.wrapper}>
+            <Button
+              type='submit'
+              variant='contained'
+              fullWidth
+              color='primary'
+              className={classes.submit}
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              Login
+            </Button>
+            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+          </div>
+        </form>
+      </Paper>
+    </main>
+  );
+};
 
 LoginForm.propTypes = {
   email: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(LoginForm);

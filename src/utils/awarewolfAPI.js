@@ -24,6 +24,16 @@ class AwarewolfAPI {
       }
     });
   };
+
+  fetchPosts = token => {
+    return this.makeRequest({
+      endpoint: '/api/posts',
+      payload: {
+        method: 'GET',
+        headers: { token }
+      }
+    });
+  };
 }
 
 const awarewolfAPI = new AwarewolfAPI();
