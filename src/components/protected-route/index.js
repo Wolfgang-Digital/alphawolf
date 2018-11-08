@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withSnackbar } from 'notistack';
 import { Button } from '@material-ui/core';
+import { constants } from '../../utils';
 
 const snackbarOptions = {
   variant: 'warning',
@@ -12,14 +13,14 @@ const snackbarOptions = {
     horizontal: 'right',
     vertical: 'top'
   },
-  autoHideDuration: 2000,
+  autoHideDuration: constants.SNACKBAR_DURATION,
   action: <Button size="small">Dismiss</Button>
 };
 
 const styles = () => ({
   wrapper: {
-    width: '100vw',
-    height: '100vh',
+    width: '100%',
+    height: '80%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
@@ -38,7 +39,6 @@ class ProtectedRoute extends Component {
     if (this.props.timeout) {
       this.timer = setTimeout(() => {
         this.setState({ timedOut: true });
-        this.timer = 0;
         if (!this.props.isAuthorised) this.props.enqueueSnackbar('You must be logged in to view this page.', snackbarOptions);
       }, this.props.timeout);
     }
@@ -54,7 +54,7 @@ class ProtectedRoute extends Component {
     if (!isAuthorised && timeout && !this.state.timedOut) {
       return (
         <div className={classes.wrapper}>
-          <CircularProgress size={48} className={classes.progress} />
+          <CircularProgress size={52} className={classes.progress} />
         </div>
       );
     }

@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { format } from '../../utils';
 import { Button, Paper, Typography, Avatar } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/LockOutlined';
-import { Menu } from '../../components';
 
 const styles = theme => ({
   layout: {
@@ -39,32 +38,30 @@ const styles = theme => ({
 });
 
 const Home = ({ user, userLogout, classes }) => (
-  <Menu>
-    <section className={classes.layout}>
-      <Paper className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          {
-            !!user.avatar ?
-            <img className={classes.image} src={user.avatar} alt='User Avatar'/> :
+  <div className={classes.layout}>
+    <Paper className={classes.paper}>
+      <Avatar className={classes.avatar}>
+        {
+          !!user.avatar ?
+            <img className={classes.image} src={user.avatar} alt='User Avatar' /> :
             <LockIcon />
-          }
-        </Avatar>
-        <Typography component='h1' variant='h5'>
-          {`Welcome ${format.toTitleCase(user.username)}`}
-        </Typography>
-        <Button
-          type='submit'
-          variant='contained'
-          fullWidth
-          color='primary'
-          className={classes.logout}
-          onClick={userLogout}
-        >
-          Logout
+        }
+      </Avatar>
+      <Typography component='h1' variant='h5'>
+        {`Welcome ${format.toTitleCase(user.username)}`}
+      </Typography>
+      <Button
+        type='submit'
+        variant='contained'
+        fullWidth
+        color='primary'
+        className={classes.logout}
+        onClick={userLogout}
+      >
+        Logout
       </Button>
-      </Paper>
-    </section>
-  </Menu>
+    </Paper>
+  </div>
 );
 
 Home.propTypes = {

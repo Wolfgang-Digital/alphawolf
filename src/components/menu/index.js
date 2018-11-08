@@ -13,11 +13,13 @@ import {
   ListItemText,
   AppBar,
   Toolbar,
-  Typography
+  Typography,
+  Avatar
 } from '@material-ui/core';
 import { ChevronLeft, Forum, BarChart, ExitToApp } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import styles from './styles';
+import logo from '../../images/logo.svg';
 
 class Menu extends React.Component {
   state = {
@@ -29,7 +31,7 @@ class Menu extends React.Component {
   closeMenu = () => this.setState({ open: false });
 
   render() {
-    const { classes } = this.props;
+    const { classes, userLogout } = this.props;
 
     return (
       <div className={classes.root}>
@@ -59,6 +61,9 @@ class Menu extends React.Component {
           open={this.state.open}
         >
           <div className={classes.toolbar}>
+            <Avatar className={classes.avatar}>
+              <img src={logo} alt='Wolfgang Logo' />
+            </Avatar>
             <IconButton onClick={this.closeMenu}>
               <ChevronLeft />
             </IconButton>
@@ -71,14 +76,14 @@ class Menu extends React.Component {
                 <ListItemText primary='Manage Posts' />
               </ListItem>
             </Link>
-            <Link to='/'>
+            <Link to='/survey-results'>
               <ListItem button>
                 <ListItemIcon><BarChart /></ListItemIcon>
                 <ListItemText primary='Survey Results' />
               </ListItem>
             </Link>
             <Divider className={classes.pushBottom}/>
-            <ListItem button>
+            <ListItem button onClick={userLogout}>
               <ListItemIcon><ExitToApp /></ListItemIcon>
               <ListItemText primary='Logout' />
             </ListItem>
@@ -94,7 +99,8 @@ class Menu extends React.Component {
 }
 
 Menu.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  userLogout: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Menu);

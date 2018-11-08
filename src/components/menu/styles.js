@@ -72,6 +72,15 @@ const styles = theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column'
+  },
+  avatar: {
+    marginRight: 'auto',
+    background: '#fff',
+    marginLeft: 12,
+    padding: 4,
+    '& img': {
+      width: '100%'
+    }
   }
 });
 

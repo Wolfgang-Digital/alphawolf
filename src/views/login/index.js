@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LoginForm from './LoginForm';
-import { awarewolfAPI, errorHandler } from '../../utils';
+import { awarewolfAPI, errorHandler, constants } from '../../utils';
 import { withSnackbar } from 'notistack';
 import { Button } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-
-const TIMEOUT = 1000 * 30;
 
 const snackbarOptions = {
   variant: 'error',
@@ -40,7 +38,7 @@ class Login extends Component {
         this.timer = setTimeout(() => {
           this.setState({ loading: false });
           enqueueSnackbar('Connection timeout.', snackbarOptions);
-        }, TIMEOUT);
+        }, constants.LOGIN_TIMEOUT);
 
         const res = await awarewolfAPI.login({ email, password });
 
@@ -55,7 +53,7 @@ class Login extends Component {
             enqueueSnackbar('Unauthorised access.', snackbarOptions);
           }
         } else {
-          const error = errorHandler.parseServerMessage(res.messages);
+          const error = errorHandler.parseServerMessage(res);
           enqueueSnackbar(error, snackbarOptions);
         }
       });

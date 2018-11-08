@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withSnackbar } from 'notistack';
-import { awarewolfAPI, errorHandler, constants } from '../../../utils';
+import { awarewolfAPI, errorHandler, constants, format } from '../../../utils';
 import { Button } from '@material-ui/core';
-import PostTable from './PostTable';
+import { ResultsTable } from '../../../components';
 
 const snackbarOptions = {
   variant: 'error',
@@ -15,13 +15,21 @@ const snackbarOptions = {
   action: <Button size="small">Dismiss</Button>
 };
 
-class Posts extends Component {
+const rows = [
+  { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
+  { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
+  { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
+  { id: 'numQuestions', numeric: true, disablePadding: false, label: 'Questions' },
+  { id: 'numResponses', numeric: true, disablePadding: false, label: 'Responses' }
+];
+
+class Surveys extends Component {
   state = {
-    posts: [],
+    surveys: [],
     loading: false
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { user, enqueueSnackbar } = this.props;
 
     this.setState({ loading: true }, async () => {
@@ -32,7 +40,7 @@ class Posts extends Component {
       }, constants.FETCH_TIMEOUT);
 
       const res = await awarewolfAPI.fetchData({
-        endpoint: 'posts',
+        endpoint: 'surveys',
         token: user.token
       });
 
@@ -40,7 +48,18 @@ class Posts extends Component {
       this.setState({ loading: false });
 
       if (res && res.success) {
-        this.setState({ posts: res.data });
+        this.setState({
+          surveys: res.data.map(n => {
+            return {
+              _id: n._id,
+              date: Date.parse(n.createdAt),
+              title: n.title,
+              author: format.toTitleCase(n._author.username),
+              numQuestions: n.questions.length,
+              numResponses: n.userResponses.length
+            }
+          })
+        });
       } else {
         const error = errorHandler.parseServerMessage(res);
         enqueueSnackbar(error, snackbarOptions);
@@ -49,18 +68,20 @@ class Posts extends Component {
   }
 
   render() {
-    const { posts, loading } = this.state;
+    const { surveys, loading } = this.state;
 
     return (
-      <PostTable
-        posts={posts}
+      <ResultsTable
+        tableTitle='Awarewolf Surveys'
+        data={surveys}
+        rows={rows}
         loading={loading}
       />
     );
   }
 }
 
-Posts.propTypes = {
+Surveys.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
@@ -69,4 +90,4 @@ Posts.propTypes = {
   enqueueSnackbar: PropTypes.func.isRequired
 };
 
-export default withSnackbar(Posts);
+export default withSnackbar(Surveys);

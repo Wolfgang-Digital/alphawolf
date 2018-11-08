@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ProtectedRoute } from './components';
+import { Menu, ProtectedRoute } from './components';
 import { Login, Home } from './views';
-import { Posts } from './views/awarewolf';
-
-const REDIRECT_TIMEOUT = 1000 * 2;
+import { Posts, Surveys } from './views/awarewolf';
+import { constants } from './utils';
 
 class App extends Component {
   state = {
@@ -29,6 +28,12 @@ class App extends Component {
 
   userLogout = () => {
     this.setState({ user: null });
+    const cookies = document.cookie.split(';');
+    cookies.forEach(c => {
+      const eqPos = c.indexOf('=');
+      const name = eqPos > -1 ? c.substr(0, eqPos) : c;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    });
   };
 
   isValidUser = () => {
@@ -42,23 +47,32 @@ class App extends Component {
 
     return (
       <Router>
-        <Switch>
-          <Route
-            exact path='/'
-            render={() =>
-              isAuthorised ?
-                <Home user={user} userLogout={this.userLogout} /> :
-                <Login userLogin={this.userLogin} />
-            }
-          />
-          <ProtectedRoute
-            path='/manage-posts'
-            component={() => <Posts user={user} />}
-            isAuthorised={isAuthorised}
-            redirectTo='/'
-            timeout={REDIRECT_TIMEOUT}
-          />
-        </Switch>
+        <Menu userLogout={this.userLogout}>
+          <Switch>
+            <Route
+              exact path='/'
+              render={() =>
+                isAuthorised ?
+                  <Home user={user} userLogout={this.userLogout} /> :
+                  <Login userLogin={this.userLogin} />
+              }
+            />
+            <ProtectedRoute
+              path='/manage-posts'
+              component={() => <Posts user={user} />}
+              isAuthorised={isAuthorised}
+              redirectTo='/'
+              timeout={constants.REDIRECT_TIMEOUT}
+            />
+            <ProtectedRoute
+              path='/survey-results'
+              component={() => <Surveys user={user} />}
+              isAuthorised={isAuthorised}
+              redirectTo='/'
+              timeout={constants.REDIRECT_TIMEOUT}
+            />
+          </Switch>
+        </Menu>
       </Router>
     );
   }
