@@ -72,7 +72,7 @@ class Surveys extends Component {
 
     return (
       <ResultsTable
-        tableTitle='Awarewolf Surveys'
+        tableTitle='Survey Results'
         data={surveys}
         rows={rows}
         loading={loading}

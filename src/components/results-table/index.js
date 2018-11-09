@@ -70,6 +70,7 @@ class ResultsTable extends Component {
   };
 
   handleClick = (e, id) => {
+    e.stopPropagation();
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -83,14 +84,13 @@ class ResultsTable extends Component {
         selected.slice(selectedIndex + 1)
       );
     }
-
     this.setState({ selected: newSelected });
   };
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes, data, rows, tableTitle, loading } = this.props;
+    const { classes, data, rows, tableTitle, loading, handleClick } = this.props;
     const { selected, order, orderBy, page, rowsPerPage } = this.state;
 
     if (loading) {
@@ -127,7 +127,7 @@ class ResultsTable extends Component {
                   return (
                     <TableRow
                       hover
-                      
+                      onClick={() => handleClick(n._id)}
                       key={n._id}
                       role='checkbox'
                       tabIndex={-1}
@@ -138,7 +138,7 @@ class ResultsTable extends Component {
                       </TableCell>
                       {rows.map((m, i) => (
                         <TableCell numeric={m.numeric} key={i}>
-                          { m.id === 'date' ? formatDate(parseDate(n[m.id]), 'DD.MM.YY - HH:MM') : n[m.id] }
+                          { m.id === 'date' ? formatDate(parseDate(n[m.id]), 'DD.MM.YY') : n[m.id] }
                         </TableCell>
                       ))}
                     </TableRow>

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withSnackbar } from 'notistack';
-import { awarewolfAPI, errorHandler, constants } from '../../../utils';
+import { awarewolfAPI, errorHandler, constants, format } from '../../../utils';
 import { Button } from '@material-ui/core';
-import PostTable from './PostTable';
+import { ResultsTable } from '../../../components';
 
 const snackbarOptions = {
   variant: 'error',
@@ -14,6 +14,16 @@ const snackbarOptions = {
   autoHideDuration: constants.SNACKBAR_DURATION,
   action: <Button size="small">Dismiss</Button>
 };
+
+const rows = [
+  { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
+  { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
+  { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
+  { id: 'numComments', numeric: true, disablePadding: false, label: 'Comments' },
+  { id: 'likes', numeric: true, disablePadding: false, label: 'Likes' },
+  { id: 'dislikes', numeric: true, disablePadding: false, label: 'Dislikes' },
+  { id: 'score', numeric: true, disablePadding: false, label: 'Score' }
+];
 
 class Posts extends Component {
   state = {
@@ -40,7 +50,21 @@ class Posts extends Component {
       this.setState({ loading: false });
 
       if (res && res.success) {
-        this.setState({ posts: res.data });
+        this.setState({
+          posts: res.data.map(n => {
+            const votes = format.countVotes(n._votes);
+            return {
+              _id: n._id,
+              date: Date.parse(n.createdAt),
+              title: n.title,
+              author: format.toTitleCase(n._author.username),
+              numComments: format.countChildren(n._comments),
+              likes: votes.likes,
+              dislikes: votes.dislikes,
+              score: votes.score
+            }
+          })
+        });
       } else {
         const error = errorHandler.parseServerMessage(res);
         enqueueSnackbar(error, snackbarOptions);
@@ -48,13 +72,20 @@ class Posts extends Component {
     });
   }
 
+  openPost = id => {
+    window.open(`https://awarewolf.herokuapp.com/posts/${id}`, '_blank');
+  };
+
   render() {
     const { posts, loading } = this.state;
 
     return (
-      <PostTable
-        posts={posts}
+      <ResultsTable
+        tableTitle='Manage Posts'
+        data={posts}
+        rows={rows}
         loading={loading}
+        handleClick={this.openPost}
       />
     );
   }

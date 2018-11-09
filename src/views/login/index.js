@@ -45,7 +45,7 @@ class Login extends Component {
         clearTimeout(this.timer);
         this.setState({ loading: false });
 
-        if (res.success) {
+        if (res && res.success) {
           if (res.data.roles.includes('admin')) {
             userLogin(res.data);
             history.push('/manage-posts');

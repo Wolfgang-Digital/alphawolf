@@ -31,7 +31,17 @@ class Menu extends React.Component {
   closeMenu = () => this.setState({ open: false });
 
   render() {
-    const { classes, userLogout } = this.props;
+    const { children, classes, userLogout, isAuthorised } = this.props;
+
+    if (!isAuthorised) {
+      return (
+        <div className={classes.root}>
+          <main className={classes.content}>
+            { children }
+          </main>
+        </div>
+      );
+    }
 
     return (
       <div className={classes.root}>
@@ -91,7 +101,7 @@ class Menu extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          {this.props.children}
+          { children }
         </main>
       </div>
     );
@@ -100,7 +110,8 @@ class Menu extends React.Component {
 
 Menu.propTypes = {
   classes: PropTypes.object.isRequired,
-  userLogout: PropTypes.func.isRequired
+  userLogout: PropTypes.func.isRequired,
+  isAuthorised: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(Menu);

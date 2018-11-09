@@ -47,7 +47,7 @@ class App extends Component {
 
     return (
       <Router>
-        <Menu userLogout={this.userLogout}>
+        <Menu userLogout={this.userLogout} isAuthorised={isAuthorised}>
           <Switch>
             <Route
               exact path='/'
