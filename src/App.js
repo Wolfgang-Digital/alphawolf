@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Menu, ProtectedRoute } from './components';
 import { Login, Home } from './views';
-import { Posts, Surveys } from './views/awarewolf';
+import { Posts, Surveys, SurveyResults } from './views/awarewolf';
 import { constants } from './utils';
 
 class App extends Component {
@@ -11,13 +11,14 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const user = document.cookie.split(';')
+    const userCookie = document.cookie.split(';')
       .find(n => n.includes('wolfganger='));
 
-    if (user) {
-      this.setState({
-        user: JSON.parse(user.replace('wolfganger=', ''))
-      });
+    if (userCookie) {
+      const user = JSON.parse(userCookie.replace('wolfganger=', ''));
+      if (user.roles.includes('admin')) {
+        this.setState({ user });
+      }
     }
   }
 
@@ -58,14 +59,21 @@ class App extends Component {
               }
             />
             <ProtectedRoute
-              path='/manage-posts'
+              path='/survey-results/:id'
+              component={() => <SurveyResults user={user} />}
+              isAuthorised={isAuthorised}
+              redirectTo='/'
+              timeout={constants.REDIRECT_TIMEOUT}
+            />
+            <ProtectedRoute
+              exact path='/manage-posts'
               component={() => <Posts user={user} />}
               isAuthorised={isAuthorised}
               redirectTo='/'
               timeout={constants.REDIRECT_TIMEOUT}
             />
             <ProtectedRoute
-              path='/survey-results'
+              exact path='/survey-results'
               component={() => <Surveys user={user} />}
               isAuthorised={isAuthorised}
               redirectTo='/'

@@ -4,6 +4,7 @@ import { withSnackbar } from 'notistack';
 import { awarewolfAPI, errorHandler, constants, format } from '../../../utils';
 import { Button } from '@material-ui/core';
 import { ResultsTable } from '../../../components';
+import Actions from './Actions';
 
 const snackbarOptions = {
   variant: 'error',
@@ -20,8 +21,10 @@ const rows = [
   { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
   { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
   { id: 'numQuestions', numeric: true, disablePadding: false, label: 'Questions' },
-  { id: 'numResponses', numeric: true, disablePadding: false, label: 'Responses' }
+  { id: 'numResponses', numeric: true, disablePadding: false, label: 'Responses' },
+  { id: 'actions', numeric: true, disablePadding: false, label: 'Actions' }
 ];
+
 
 class Surveys extends Component {
   state = {
@@ -75,6 +78,7 @@ class Surveys extends Component {
         tableTitle='Survey Results'
         data={surveys}
         rows={rows}
+        actions={() => <Actions _id='test'/>}
         loading={loading}
       />
     );
