@@ -90,7 +90,7 @@ class ResultsTable extends Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes, data, rows, tableTitle, loading, actions: Actions } = this.props;
+    const { classes, data, rows, tableTitle, loading, actionBar: ActionBar, ...actions } = this.props;
     const { selected, order, orderBy, page, rowsPerPage } = this.state;
 
     if (loading) {
@@ -138,7 +138,7 @@ class ResultsTable extends Component {
                       {rows.map((m, i) => (
                         <TableCell numeric={m.numeric} key={i}>
                           { m.id === 'date' ? formatDate(parseDate(n[m.id]), 'DD.MM.YY') : n[m.id] }
-                          { m.id === 'actions' && <Actions id={n._id} /> }
+                          { m.id === 'actions' && <ActionBar id={n._id} {...actions} /> }
                         </TableCell>
                       ))}
                     </TableRow>

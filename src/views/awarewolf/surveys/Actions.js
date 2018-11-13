@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, IconButton } from '@material-ui/core';
-import { Delete, OpenInBrowser, BarChart } from '@material-ui/icons';
+import { OpenInBrowser, BarChart } from '@material-ui/icons';
 
 const Actions = props => {
-  const { id } = props;
-  console.log(props);
+  const { id, viewSurveyResults } = props;
+
   return (
     <>
-      <Tooltip title="Results">
-        <IconButton aria-label="Results" onClick={() => console.log(id)}>
+      <Tooltip title="View results">
+        <IconButton aria-label="Results" onClick={() => viewSurveyResults(id)}>
           <BarChart />
         </IconButton>
       </Tooltip>
@@ -18,17 +18,13 @@ const Actions = props => {
           <OpenInBrowser />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Delete">
-        <IconButton aria-label="Delete">
-          <Delete />
-        </IconButton>
-      </Tooltip>
     </>
   );
 };
 
 Actions.propTypes = {
-  
+  id: PropTypes.string.isRequired,
+  viewSurveyResults: PropTypes.func.isRequired
 };
 
 export default Actions;

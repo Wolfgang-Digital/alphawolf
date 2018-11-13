@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { withSnackbar } from 'notistack';
 import { awarewolfAPI, errorHandler, constants } from '../../../utils';
 import { Button } from '@material-ui/core';
+import Results from './Results';
 
 const snackbarOptions = {
   variant: 'error',
@@ -52,9 +53,10 @@ class SurveyResults extends Component {
     const { survey, loading } = this.state;
     
     return (
-      <>
-        { (!survey && !loading) && <>No results.</> }
-      </>
+      <Results
+        survey={survey}
+        loading={loading}
+      />
     );
   }
 }

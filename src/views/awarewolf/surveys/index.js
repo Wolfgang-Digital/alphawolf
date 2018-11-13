@@ -4,6 +4,7 @@ import { withSnackbar } from 'notistack';
 import { awarewolfAPI, errorHandler, constants, format } from '../../../utils';
 import { Button } from '@material-ui/core';
 import { ResultsTable } from '../../../components';
+import { withRouter } from 'react-router-dom';
 import Actions from './Actions';
 
 const snackbarOptions = {
@@ -70,6 +71,10 @@ class Surveys extends Component {
     });
   }
 
+  viewSurveyResults = id => {
+    this.props.history.push(`/survey-results/${id}`);
+  };
+
   render() {
     const { surveys, loading } = this.state;
 
@@ -78,8 +83,9 @@ class Surveys extends Component {
         tableTitle='Survey Results'
         data={surveys}
         rows={rows}
-        actions={() => <Actions _id='test'/>}
+        actionBar={Actions}
         loading={loading}
+        viewSurveyResults={this.viewSurveyResults}
       />
     );
   }
@@ -94,4 +100,4 @@ Surveys.propTypes = {
   enqueueSnackbar: PropTypes.func.isRequired
 };
 
-export default withSnackbar(Surveys);
+export default withRouter(withSnackbar(Surveys));
