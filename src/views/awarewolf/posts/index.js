@@ -85,7 +85,7 @@ class Posts extends Component {
         data={posts}
         rows={rows}
         loading={loading}
-        handleClick={this.openPost}
+        openInApp={this.openPost}
       />
     );
   }

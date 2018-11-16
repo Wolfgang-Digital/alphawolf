@@ -35,6 +35,16 @@ class AwarewolfAPI {
     });
   };
 
+  fetchUsers = token => {
+    return this.makeRequest({
+      endpoint: '/user',
+      payload: {
+        method: 'GET',
+        headers: { token }
+      }
+    })
+  };
+ 
   postData = ({ endpoint, data, token }) => {
     return this.makeRequest({
       endpoint: `/api/${endpoint}`,

@@ -69,7 +69,11 @@ class InidividualResponse extends Component {
     document.removeEventListener('keydown', this.handleKeyPress, false);
   }
 
-  adjustIndex = value => this.setState(state => ({ index: state.index + value }));
+  adjustIndex = value => {
+    const max = this.props.survey.answers.length;
+    const index = (((this.state.index + value) % max) + max) % max;
+    this.setState({ index });
+  };
 
   setIndex = index => this.setState({ index });
 
@@ -94,11 +98,11 @@ class InidividualResponse extends Component {
             <Typography variant="subtitle1">{`${getNumQuestionsAnswered(survey.questions, response)} answers out of ${survey.questions.length}`}</Typography>
           </div>
           <div className={classes.controls}>
-            <IconButton onClick={() => this.adjustIndex(-1)} disabled={index === 0}>
+            <IconButton onClick={() => this.adjustIndex(-1)}>
               <NavigateBefore />
             </IconButton>
             <Typography variant="subtitle1">{`Showing ${index + 1} of ${survey.answers.length}`}</Typography>
-            <IconButton onClick={() => this.adjustIndex(1)} disabled={index === survey.answers.length - 1}>
+            <IconButton onClick={() => this.adjustIndex(1)}>
               <NavigateNext />
             </IconButton>
           </div>

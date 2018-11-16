@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Menu, ProtectedRoute } from './components';
-import { Login, Home } from './views';
+import { Login, Home, Users } from './views';
 import { Posts, Surveys, SurveyResults } from './views/awarewolf';
 import { constants } from './utils';
 
@@ -75,6 +75,13 @@ class App extends Component {
             <ProtectedRoute
               exact path='/survey-results'
               component={() => <Surveys user={user} />}
+              isAuthorised={isAuthorised}
+              redirectTo='/'
+              timeout={constants.REDIRECT_TIMEOUT}
+            />
+            <ProtectedRoute
+              path='/manage-users'
+              component={() => <Users user={user} />}
               isAuthorised={isAuthorised}
               redirectTo='/'
               timeout={constants.REDIRECT_TIMEOUT}

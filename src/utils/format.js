@@ -1,4 +1,5 @@
 export const toTitleCase = str => {
+  if (!str) return;
   return str.toLowerCase().split(' ').map(function(word) {
     return word.replace(word[0], word[0].toUpperCase());
   }).join(' ');

@@ -4,7 +4,8 @@ import { awarewolfAPI, constants } from '../../../../utils';
 
 class WatsonData extends Component {
   state = {
-    data: null,
+    tone: null,
+    language: null,
     loading: false,
     error: false
   };
@@ -14,7 +15,7 @@ class WatsonData extends Component {
     this.makeRequest('language');
   }
 
-  makeRequest = endpoint => {
+  makeRequest = type => {
     const { user, text } = this.props;
 
     this.setState({ loading: true }, async () => {
@@ -24,7 +25,7 @@ class WatsonData extends Component {
       }, constants.FETCH_TIMEOUT);
 
       const res = await awarewolfAPI.analyse({
-        endpoint,
+        endpoint: type,
         text: text.answers,
         token: user.token
       });
@@ -33,8 +34,8 @@ class WatsonData extends Component {
       this.setState({ loading: false });
 
       if (res && res.data) {
-        //console.log(res.data);
-        this.setState({ data: res.data });
+        console.log(res.data);
+        this.setState({ [type]: res.data });
       } else {
         this.setState({ error: true });
       }
@@ -42,13 +43,13 @@ class WatsonData extends Component {
   };
 
   render() {
-    const { data } = this.state;
+    const { tone, language } = this.state;
     const { text } = this.props;
 
     return (
       <>
         <p>{text.question}</p>
-        {(data && data.document_tone) && data.document_tone.tones.map((n, i) => {
+        {tone && tone.document_tone.tones.map((n, i) => {
           return <li key={i}>{`Tone: ${n.tone_name} ---> Score: ${n.score}`}</li>;
         })}
       </>
