@@ -96,11 +96,9 @@ class ResultsTable extends Component {
     if (loading) {
       return (
         <>
-          {loading &&
-            <div className={classes.wrapper}>
-              <CircularProgress size={52} className={classes.progress} />
-            </div>
-          }
+          <div className={classes.wrapper}>
+            <CircularProgress size={52} className={classes.progress} />
+          </div>
         </>
       )
     }
@@ -137,8 +135,8 @@ class ResultsTable extends Component {
                       </TableCell>
                       {rows.map((m, i) => (
                         <TableCell numeric={m.numeric} key={i}>
-                          { m.id === 'date' ? formatDate(parseDate(n[m.id]), 'DD.MM.YY') : n[m.id] }
-                          { m.id === 'actions' && <ActionBar id={n._id} {...actions} /> }
+                          {m.id === 'date' ? formatDate(parseDate(n[m.id]), 'DD.MM.YY') : n[m.id]}
+                          {m.id === 'actions' && <ActionBar id={n._id} {...actions} />}
                         </TableCell>
                       ))}
                     </TableRow>

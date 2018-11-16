@@ -1,6 +1,6 @@
 class AwarewolfAPI {
   constructor() {
-    this.url = 'http://localhost:3001';
+    this.url = 'https://awarewolf.herokuapp.com';
   }
 
   makeRequest = async ({ endpoint, payload }) => {
@@ -8,7 +8,7 @@ class AwarewolfAPI {
       const res = await fetch(`${this.url}${endpoint}`, payload);
       return await res.json();
     } catch (err) {
-      console.log(err);
+      console.log(err.toString());
     }
   };
 
@@ -33,6 +33,34 @@ class AwarewolfAPI {
         headers: { token }
       }
     });
+  };
+
+  postData = ({ endpoint, data, token }) => {
+    return this.makeRequest({
+      endpoint: `/api/${endpoint}`,
+      payload: {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          token
+        },
+        body: JSON.stringify({ data })
+      }
+    });
+  };
+
+  analyse = ({ endpoint, text, token }) => {
+    return this.makeRequest({
+      endpoint: `/watson/${endpoint}`,
+      payload: {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          token
+        },
+        body: JSON.stringify({ text })
+      }
+    })
   };
 }
 

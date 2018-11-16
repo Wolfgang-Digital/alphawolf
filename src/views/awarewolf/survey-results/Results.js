@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Paper, CircularProgress, Divider } from '@material-ui/core';
 import { Mood, Dvr, Equalizer } from '@material-ui/icons';
-import Summary from './Summary';
+import Summary from './summary';
+import IndividialResponse from './response';
+import SentimentAnalysis from './sentiments';
 
 const styles = {
   root: {
@@ -29,7 +31,7 @@ class Results extends Component {
   handleChange = (e, value) => this.setState({ value });
 
   render() {
-    const { classes, survey, loading } = this.props;
+    const { classes, survey, loading, user } = this.props;
     const { value } = this.state;
 
     if (loading || !survey) {
@@ -59,13 +61,20 @@ class Results extends Component {
         </Tabs>
         <Divider />
         {value === 0 && <Summary survey={survey} />}
+        {value === 1 && <IndividialResponse survey={survey} />}
+        {value === 2 && <SentimentAnalysis survey={survey} user={user} />}
       </Paper>
     );
   }
 }
 
 Results.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  survey: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    questions: PropTypes.arrayOf(PropTypes.object).isRequired,
+    answers: PropTypes.arrayOf(PropTypes.array)
+  })
 };
 
 export default withStyles(styles)(Results);

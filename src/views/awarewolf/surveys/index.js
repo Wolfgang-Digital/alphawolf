@@ -71,8 +71,12 @@ class Surveys extends Component {
     });
   }
 
-  viewSurveyResults = id => {
+  open = id => {
     this.props.history.push(`/survey-results/${id}`);
+  };
+
+  openInApp = id => {
+    window.open(`https://awarewolf.herokuapp.com/surveys/${id}`);
   };
 
   render() {
@@ -85,7 +89,8 @@ class Surveys extends Component {
         rows={rows}
         actionBar={Actions}
         loading={loading}
-        viewSurveyResults={this.viewSurveyResults}
+        open={this.open}
+        openInApp={this.openInApp}
       />
     );
   }

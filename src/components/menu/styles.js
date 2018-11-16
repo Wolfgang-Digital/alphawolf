@@ -3,7 +3,7 @@ const SIDEBAR_WIDTH = 240;
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    minHeight: '100vh',
+    height: '100vh',
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
@@ -58,15 +58,13 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
-    ...theme.mixins.toolbar,
+    ...theme.mixins.toolbar
   },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
-  },
-  pushBottom: {
-    marginTop: 'auto'
+    overflowY: 'auto'
   },
   list: {
     height: '100%',
@@ -81,6 +79,9 @@ const styles = theme => ({
     '& img': {
       width: '100%'
     }
+  },
+  bottom: {
+    marginTop: 'auto'
   }
 });
 

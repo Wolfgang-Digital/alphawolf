@@ -16,7 +16,7 @@ import {
   Typography,
   Avatar
 } from '@material-ui/core';
-import { ChevronLeft, Forum, BarChart, ExitToApp } from '@material-ui/icons';
+import { ChevronLeft, Forum, BarChart, ExitToApp, People } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import styles from './styles';
 import logo from '../../images/logo.svg';
@@ -86,13 +86,20 @@ class Menu extends React.Component {
                 <ListItemText primary='Manage Posts' />
               </ListItem>
             </Link>
+            <Link to='/manage-users'>
+              <ListItem button>
+                <ListItemIcon><People /></ListItemIcon>
+                <ListItemText primary='Manage Users' />
+              </ListItem>
+            </Link>
             <Link to='/survey-results'>
               <ListItem button>
                 <ListItemIcon><BarChart /></ListItemIcon>
                 <ListItemText primary='Survey Results' />
               </ListItem>
             </Link>
-            <Divider className={classes.pushBottom}/>
+            <Divider />
+            <Divider className={classes.bottom} />
             <ListItem button onClick={userLogout}>
               <ListItemIcon><ExitToApp /></ListItemIcon>
               <ListItemText primary='Logout' />
