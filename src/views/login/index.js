@@ -38,7 +38,7 @@ class Login extends Component {
         this.timer = setTimeout(() => {
           this.setState({ loading: false });
           enqueueSnackbar('Connection timeout.', snackbarOptions);
-        }, constants.LOGIN_TIMEOUT);
+        }, constants.FETCH_TIMEOUT);
 
         const res = await awarewolfAPI.login({ email, password });
 

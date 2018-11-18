@@ -52,6 +52,7 @@ class WatsonData extends Component {
         {tone && tone.document_tone.tones.map((n, i) => {
           return <li key={i}>{`Tone: ${n.tone_name} ---> Score: ${n.score}`}</li>;
         })}
+
       </>
     );
   }

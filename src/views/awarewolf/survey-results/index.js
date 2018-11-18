@@ -56,7 +56,6 @@ class SurveyResults extends Component {
       <Results
         survey={survey}
         loading={loading}
-        user={this.props.user}
       />
     );
   }

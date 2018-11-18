@@ -23,7 +23,7 @@ const rows = [
   { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
   { id: 'numQuestions', numeric: true, disablePadding: false, label: 'Questions' },
   { id: 'numResponses', numeric: true, disablePadding: false, label: 'Responses' },
-  { id: 'actions', numeric: true, disablePadding: false, label: 'Actions' }
+  { id: 'actions', numeric: true, disablePadding: false, label: '' }
 ];
 
 

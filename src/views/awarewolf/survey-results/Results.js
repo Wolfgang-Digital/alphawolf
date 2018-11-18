@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Paper, CircularProgress, Divider } from '@material-ui/core';
-import { Mood, Dvr, Equalizer } from '@material-ui/icons';
+import { Dvr, Equalizer } from '@material-ui/icons';
 import Summary from './summary';
 import IndividialResponse from './response';
-import SentimentAnalysis from './sentiments';
 
 const styles = {
   root: {
@@ -31,7 +30,7 @@ class Results extends Component {
   handleChange = (e, value) => this.setState({ value });
 
   render() {
-    const { classes, survey, loading, user } = this.props;
+    const { classes, survey, loading } = this.props;
     const { value } = this.state;
 
     if (loading || !survey) {
@@ -57,12 +56,10 @@ class Results extends Component {
         >
           <Tab label='SUMMARY' icon={<Equalizer />} />
           <Tab label='INDIVIDUAL RESPONSES' icon={<Dvr />} />
-          <Tab label='SENTIMENT ANALYSIS' icon={<Mood />} />
         </Tabs>
         <Divider />
         {value === 0 && <Summary survey={survey} />}
         {value === 1 && <IndividialResponse survey={survey} />}
-        {value === 2 && <SentimentAnalysis survey={survey} user={user} />}
       </Paper>
     );
   }
