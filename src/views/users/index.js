@@ -55,7 +55,7 @@ class Users extends Component {
           users: res.data.map(n => {
             return {
               _id: n._id,
-              role: n.roles.includes('admin') && 'Admin',
+              role: format.toTitleCase(n.roles.join(', ')),
               user: format.toTitleCase(n.username)
             };
           })
@@ -74,7 +74,7 @@ class Users extends Component {
     return (
       <>
         <p className={classes.warning}>
-          This page is under construction.
+          This page is currently under construction.
         </p>
         <ResultsTable
           tableTitle='Manage Users'

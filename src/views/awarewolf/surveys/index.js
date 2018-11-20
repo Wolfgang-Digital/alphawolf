@@ -23,6 +23,7 @@ const rows = [
   { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
   { id: 'numQuestions', numeric: true, disablePadding: false, label: 'Questions' },
   { id: 'numResponses', numeric: true, disablePadding: false, label: 'Responses' },
+  { id: 'completion', numeric: true, disablePadding: false, label: 'Completion(%)', tooltip: '% of total users that have completed this survey'},
   { id: 'actions', numeric: true, disablePadding: false, label: '' }
 ];
 
@@ -43,29 +44,36 @@ class Surveys extends Component {
         enqueueSnackbar('Connection timeout.', snackbarOptions);
       }, constants.FETCH_TIMEOUT);
 
-      const res = await awarewolfAPI.fetchData({
+      const surveyData = await awarewolfAPI.fetchData({
         endpoint: 'surveys',
         token: user.token
       });
 
+      const userData = await awarewolfAPI.fetchUsers(user.token);
+
       clearTimeout(this.timer);
       this.setState({ loading: false });
 
-      if (res && res.success) {
+      if (surveyData && surveyData.success) {
         this.setState({
-          surveys: res.data.map(n => {
+          surveys: surveyData.data.map(n => {
+            const  completion = (userData && userData.success) ? 
+              ((n.userResponses.length / userData.data.length) * 100).toFixed(2) : 
+              'Unavailable'
+
             return {
               _id: n._id,
               date: Date.parse(n.createdAt),
               title: n.title,
               author: format.toTitleCase(n._author.username),
               numQuestions: n.questions.length,
-              numResponses: n.userResponses.length
-            }
+              numResponses: n.userResponses.length,
+              completion 
+            };
           })
         });
       } else {
-        const error = errorHandler.parseServerMessage(res);
+        const error = errorHandler.parseServerMessage(surveyData);
         enqueueSnackbar(error, snackbarOptions);
       }
     });

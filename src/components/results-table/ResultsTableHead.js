@@ -36,7 +36,7 @@ class ResultsTableHead extends Component {
                 sortDirection={orderBy === row.id ? order : false}
               >
                 <Tooltip
-                  title="Sort"
+                  title={row.tooltip || 'Sort'}
                   placement={row.numeric ? 'bottom-end' : 'bottom-start'}
                   enterDelay={300}
                 >
