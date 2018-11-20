@@ -2,25 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withSnackbar } from 'notistack';
 import { awarewolfAPI, errorHandler, constants, format } from '../../utils';
-import { Button, Avatar } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { ResultsTable } from '../../components';
 import { withStyles } from '@material-ui/core/styles';
-import Person from '@material-ui/icons/Person';
 
 const styles = theme => ({
-  avatar: {
-    width: 24,
-    height: 24,
-    marginRight: 4,
-    background: theme.palette.secondary.main
-  },
-  image: {
-    width: '100%',
-    margin: 'auto'
-  },
-  user: {
-    display: 'flex',
-    alignItems: 'center'
+  warning: {
+    margin: 'auto',
+    textAlign: 'center',
+    color: theme.palette.error.main
   }
 });
 
@@ -36,7 +26,7 @@ const snackbarOptions = {
 
 const rows = [
   { id: 'user', numeric: false, disablePadding: false, label: 'User' },
-  { id: 'roles', numeric: false, disablePadding: false, label: 'Roles' }
+  { id: 'role', numeric: false, disablePadding: false, label: 'Role' }
 ];
 
 class Users extends Component {
@@ -46,7 +36,7 @@ class Users extends Component {
   };
 
   async componentDidMount() {
-    const { user, enqueueSnackbar, classes } = this.props;
+    const { user, enqueueSnackbar } = this.props;
 
     this.setState({ loading: true }, async () => {
 
@@ -65,14 +55,8 @@ class Users extends Component {
           users: res.data.map(n => {
             return {
               _id: n._id,
-              roles: format.toTitleCase(n.roles.join(', ')),
-              user: 
-              <div className={classes.user}>
-                <Avatar className={classes.avatar}>
-                  {!!n.avatar ?<img className={classes.image} src={n.avatar} alt='User Avatar' /> :<Person />}
-                </Avatar>
-                {format.toTitleCase(n.username)}
-              </div>
+              role: n.roles.includes('admin') && 'Admin',
+              user: format.toTitleCase(n.username)
             };
           })
         });
@@ -85,14 +69,20 @@ class Users extends Component {
 
   render() {
     const { users, loading } = this.state;
+    const { classes } = this.props;
 
     return (
-      <ResultsTable
-        tableTitle='Manage Users'
-        data={users}
-        rows={rows}
-        loading={loading}
-      />
+      <>
+        <p className={classes.warning}>
+          This page is under construction.
+        </p>
+        <ResultsTable
+          tableTitle='Manage Users'
+          data={users}
+          rows={rows}
+          loading={loading}
+        />
+      </>
     );
   }
 }
