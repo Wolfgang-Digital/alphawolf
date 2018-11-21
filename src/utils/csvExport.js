@@ -1,17 +1,19 @@
 import { ExportToCsv } from 'export-to-csv';
 
 export const exportSurveyResults = survey => {
-  const data = survey.answers.map(response => {
-    const row = {};
-    response.forEach(a => {
-      const q = survey.questions.find(q => a.questionId === q.id);
-      const text = q.text.replace(',', '-');
-      if (q.type === 'text' && a.text.length > 1) row[text] = a.text.replace(',','-');
-      else if (q.type === 'scale' && a.scaleValue > 0) row[text] = a.scaleValue;
-      else if (q.type === 'multiple' && a.options.length > 0) row[text] = a.options.join(', ');
-    });
+  const data = survey.answers.map(a => {
+    const row = a.reduce((acc, curr) => {
+      const question = survey.questions.find(q => q.id === curr.questionId);
+      if (question.type === 'text' && curr.text.length > 1) acc[question.text] = curr.text;
+      if (question.type === 'scale') acc[question.text] = curr.scaleValue;
+      if (question.type === 'multiple') {
+        const options = curr.options.map(n => question.options[n]);
+        acc[question.text] = options.join(', ');
+      }
+      return acc;
+    }, {});
     return row;
-  })
+  });
 
   const options = { 
     filename: `${survey.title} - Results`,
