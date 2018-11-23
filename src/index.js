@@ -36,4 +36,4 @@ ReactDOM.render(
   </MuiThemeProvider>, 
   document.getElementById('root')
 );
-serviceWorker.unregister();
+serviceWorker.register();

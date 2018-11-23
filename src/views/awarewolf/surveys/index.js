@@ -84,7 +84,7 @@ class Surveys extends Component {
   };
 
   openInApp = id => {
-    window.open(`https://awarewolf.herokuapp.com/surveys/${id}`);
+    window.open(`https://awarewolf.netlify.com/surveys/${id}`, '_blank');
   };
 
   render() {

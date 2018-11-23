@@ -4,6 +4,7 @@ import { withSnackbar } from 'notistack';
 import { awarewolfAPI, errorHandler, constants, format } from '../../../utils';
 import { Button } from '@material-ui/core';
 import { ResultsTable } from '../../../components';
+import Actions from './Actions';
 
 const snackbarOptions = {
   variant: 'error',
@@ -22,7 +23,8 @@ const rows = [
   { id: 'numComments', numeric: true, disablePadding: false, label: 'Comments' },
   { id: 'likes', numeric: true, disablePadding: false, label: 'Likes' },
   { id: 'dislikes', numeric: true, disablePadding: false, label: 'Dislikes' },
-  { id: 'score', numeric: true, disablePadding: false, label: 'Score' }
+  { id: 'score', numeric: true, disablePadding: false, label: 'Score' },
+  { id: 'actions', numeric: true, disablePadding: false, label: '' }
 ];
 
 class Posts extends Component {
@@ -73,7 +75,7 @@ class Posts extends Component {
   }
 
   openPost = id => {
-    window.open(`https://awarewolf.herokuapp.com/posts/${id}`, '_blank');
+    window.open(`https://awarewolf.netlify.com/posts/${id}`, '_blank');
   };
 
   render() {
@@ -85,6 +87,7 @@ class Posts extends Component {
         data={posts}
         rows={rows}
         loading={loading}
+        actionBar={Actions}
         openInApp={this.openPost}
       />
     );
