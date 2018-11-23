@@ -11,6 +11,9 @@ class App extends Component {
   };
 
   componentDidMount() {
+    fetch('https://awarewolf-api.herokuapp.com')
+    .catch(console.log);
+
     const userCookie = document.cookie.split(';')
       .find(n => n.includes('wolfganger='));
 
