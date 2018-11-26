@@ -15,18 +15,19 @@ class ResultsTableHead extends Component {
   };
 
   render() {
-    const { onSelectAllClick, numSelected, order, orderBy, rowCount, rows } = this.props;
+    const { onSelectAllClick, numSelected, order, orderBy, rowCount, rows, isDeletable } = this.props;
 
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
+          {isDeletable && 
+            <TableCell padding="checkbox">
+              <Checkbox
+                indeterminate={numSelected > 0 && numSelected < rowCount}
+                checked={numSelected === rowCount}
+                onChange={onSelectAllClick}
+              />
+            </TableCell>}
           {rows.map(row => {
             return (
               <TableCell

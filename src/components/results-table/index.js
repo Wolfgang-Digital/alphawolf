@@ -22,7 +22,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3
   },
   table: {
-    minWidth: 1020,
+    minWidth: 1020
   },
   tableWrapper: {
     overflowX: 'auto',
@@ -36,6 +36,9 @@ const styles = theme => ({
   },
   progress: {
     margin: 'auto'
+  },
+  title: {
+    maxWidth: 300
   }
 });
 
@@ -90,7 +93,7 @@ class ResultsTable extends Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes, data, rows, tableTitle, loading, actionBar: ActionBar, ...actions } = this.props;
+    const { classes, data, rows, tableTitle, loading, isDeletable, actionBar: ActionBar, ...rest } = this.props;
     const { selected, order, orderBy, page, rowsPerPage } = this.state;
 
     if (loading) {
@@ -116,6 +119,7 @@ class ResultsTable extends Component {
               onRequestSort={this.handleRequestSort}
               rowCount={data.length}
               rows={rows}
+              isDeletable={isDeletable}
             />
             <TableBody>
               {format.stableSort(data, format.getSorting(order, orderBy))
@@ -130,13 +134,14 @@ class ResultsTable extends Component {
                       tabIndex={-1}
                       selected={isSelected}
                     >
-                      <TableCell padding='checkbox'>
-                        <Checkbox onClick={e => this.handleClick(e, n._id)} checked={isSelected} />
-                      </TableCell>
+                      {isDeletable &&
+                        <TableCell padding='checkbox'>
+                          <Checkbox onClick={e => this.handleClick(e, n._id)} checked={isSelected} />
+                        </TableCell>}
                       {rows.map((m, i) => (
-                        <TableCell numeric={m.numeric} key={i}>
+                        <TableCell numeric={m.numeric} key={i} className={m.id === 'title' ? classes.title : null}>
                           {m.id === 'date' ? formatDate(parseDate(n[m.id]), 'DD.MM.YY') : n[m.id]}
-                          {m.id === 'actions' && <ActionBar id={n._id} {...actions} />}
+                          {m.id === 'actions' && <ActionBar id={n._id} isPinned={n.isPinned} isResolved={n.isResolved} {...rest} />}
                         </TableCell>
                       ))}
                     </TableRow>

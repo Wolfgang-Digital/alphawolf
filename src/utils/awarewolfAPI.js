@@ -1,6 +1,6 @@
 class AwarewolfAPI {
   constructor() {
-    this.url = 'https://awarewolf-api.herokuapp.com';
+    this.url = 'http://localhost:3001';
   }
 
   makeRequest = async ({ endpoint, payload }) => {

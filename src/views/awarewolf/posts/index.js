@@ -63,7 +63,9 @@ class Posts extends Component {
               numComments: format.countChildren(n._comments),
               likes: votes.likes,
               dislikes: votes.dislikes,
-              score: votes.score
+              score: votes.score,
+              isPinned: n.isPinned,
+              isResolved: n.isResolved
             }
           })
         });
@@ -78,6 +80,82 @@ class Posts extends Component {
     window.open(`https://awarewolf.netlify.com/posts/${id}`, '_blank');
   };
 
+  pinPost = async id => {
+    const { enqueueSnackbar, user } = this.props;
+
+    const res = await awarewolfAPI.makeRequest({
+      endpoint: `/api/posts/${id}/pin`,
+      payload: {
+        method: 'PUT',
+        headers: {
+          token: user.token
+        }
+      }
+    });
+
+    if (res && res.success) {
+      const { posts } = this.state;
+      const votes = format.countVotes(res.data._votes);
+      const post = {
+        _id: res.data._id,
+        date: Date.parse(res.data.createdAt),
+        title: res.data.title,
+        author: format.toTitleCase(res.data._author.username),
+        numComments: format.countChildren(res.data._comments),
+        likes: votes.likes,
+        dislikes: votes.dislikes,
+        score: votes.score,
+        isPinned: res.data.isPinned,
+        isResolved: res.data.isResolved
+      };
+
+      const index = posts.findIndex(n => n._id === id);
+      posts.splice(index, 1, post); 
+      this.setState({ posts: [...posts] });
+
+      const options = Object.assign({}, snackbarOptions, { variant: 'success' });
+      enqueueSnackbar(res.message, options);
+    }
+  };
+
+  resolvePost = async id => {
+    const { enqueueSnackbar, user } = this.props;
+
+    const res = await awarewolfAPI.makeRequest({
+      endpoint: `/api/posts/${id}/resolve`,
+      payload: {
+        method: 'PUT',
+        headers: {
+          token: user.token
+        }
+      }
+    });
+
+    if (res && res.success) {
+      const { posts } = this.state;
+      const votes = format.countVotes(res.data._votes);
+      const post = {
+        _id: res.data._id,
+        date: Date.parse(res.data.createdAt),
+        title: res.data.title,
+        author: format.toTitleCase(res.data._author.username),
+        numComments: format.countChildren(res.data._comments),
+        likes: votes.likes,
+        dislikes: votes.dislikes,
+        score: votes.score,
+        isPinned: res.data.isPinned,
+        isResolved: res.data.isResolved
+      };
+
+      const index = posts.findIndex(n => n._id === id);
+      posts.splice(index, 1, post); 
+      this.setState({ posts: [...posts] });
+
+      const options = Object.assign({}, snackbarOptions, { variant: 'success' });
+      enqueueSnackbar(res.message, options);
+    }
+  };
+
   render() {
     const { posts, loading } = this.state;
 
@@ -89,6 +167,8 @@ class Posts extends Component {
         loading={loading}
         actionBar={Actions}
         openInApp={this.openPost}
+        pinPost={this.pinPost}
+        resolvePost={this.resolvePost}
       />
     );
   }

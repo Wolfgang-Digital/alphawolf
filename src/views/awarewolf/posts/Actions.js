@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, IconButton } from '@material-ui/core';
-import { OpenInBrowser, BarChart } from '@material-ui/icons';
+import { OpenInBrowser, Lock, PriorityHigh } from '@material-ui/icons';
 
 const Actions = props => {
-  const { id, openInApp } = props;
+  const { id, openInApp, pinPost, resolvePost, isPinned, isResolved } = props;
 
   return (
     <>
-      <Tooltip title="View results">
-        <IconButton aria-label="Results" >
-          <BarChart />
+     <Tooltip title={isResolved ? 'Re-open post' : 'Resolve post'} color={isResolved ? 'secondary' : 'default'}>
+        <IconButton aria-label="Resolve" onClick={() => resolvePost(id)}>
+          <Lock />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title={isPinned ? 'Unpin post' : 'Pin post'} color={isPinned ? 'secondary' : 'default'}>
+        <IconButton aria-label="Results" onClick={() => pinPost(id)}>
+          <PriorityHigh />
         </IconButton>
       </Tooltip>
       <Tooltip title="Open in Awarewolf">
