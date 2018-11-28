@@ -139,7 +139,12 @@ class ResultsTable extends Component {
                           <Checkbox onClick={e => this.handleClick(e, n._id)} checked={isSelected} />
                         </TableCell>}
                       {rows.map((m, i) => (
-                        <TableCell numeric={m.numeric} key={i} className={m.id === 'title' ? classes.title : null}>
+                        <TableCell 
+                          numeric={m.numeric} 
+                          key={i} 
+                          className={m.id === 'title' ? classes.title : null}
+                          padding={m.id === 'title' ? 'default' : 'none'}
+                        >
                           {m.id === 'date' ? formatDate(parseDate(n[m.id]), 'DD.MM.YY') : n[m.id]}
                           {m.id === 'actions' && <ActionBar id={n._id} isPinned={n.isPinned} isResolved={n.isResolved} {...rest} />}
                         </TableCell>

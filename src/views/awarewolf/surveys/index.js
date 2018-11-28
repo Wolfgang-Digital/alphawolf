@@ -19,11 +19,11 @@ const snackbarOptions = {
 
 const rows = [
   { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
-  { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
-  { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
-  { id: 'numQuestions', numeric: true, disablePadding: false, label: 'Questions' },
-  { id: 'numResponses', numeric: true, disablePadding: false, label: 'Responses' },
-  { id: 'completion', numeric: true, disablePadding: false, label: 'Completion (%)', tooltip: '% of total users that have completed this survey'},
+  { id: 'author', numeric: false, disablePadding: true, label: 'Author' },
+  { id: 'date', numeric: false, disablePadding: true, label: 'Date' },
+  { id: 'numQuestions', numeric: true, disablePadding: true, label: 'Questions' },
+  { id: 'numResponses', numeric: true, disablePadding: true, label: 'Responses' },
+  { id: 'completion', numeric: true, disablePadding: true, label: 'Completion (%)', tooltip: '% of total users that have completed this survey'},
   { id: 'actions', numeric: true, disablePadding: false, label: '' }
 ];
 

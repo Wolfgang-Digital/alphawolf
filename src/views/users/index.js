@@ -26,7 +26,7 @@ const snackbarOptions = {
 
 const rows = [
   { id: 'user', numeric: false, disablePadding: false, label: 'User' },
-  { id: 'role', numeric: false, disablePadding: false, label: 'Role' }
+  { id: 'role', numeric: false, disablePadding: true, label: 'Role' }
 ];
 
 class Users extends Component {

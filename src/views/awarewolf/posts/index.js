@@ -18,12 +18,12 @@ const snackbarOptions = {
 
 const rows = [
   { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
-  { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
-  { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
-  { id: 'numComments', numeric: true, disablePadding: false, label: 'Comments' },
-  { id: 'likes', numeric: true, disablePadding: false, label: 'Likes' },
-  { id: 'dislikes', numeric: true, disablePadding: false, label: 'Dislikes' },
-  { id: 'score', numeric: true, disablePadding: false, label: 'Score' },
+  { id: 'author', numeric: false, disablePadding: true, label: 'Author' },
+  { id: 'date', numeric: false, disablePadding: true, label: 'Date' },
+  { id: 'numComments', numeric: true, disablePadding: true, label: 'Comments' },
+  { id: 'likes', numeric: true, disablePadding: true, label: 'Likes' },
+  { id: 'dislikes', numeric: true, disablePadding: true, label: 'Dislikes' },
+  { id: 'score', numeric: true, disablePadding: true, label: 'Score' },
   { id: 'actions', numeric: true, disablePadding: false, label: '' }
 ];
 

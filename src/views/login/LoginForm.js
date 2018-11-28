@@ -10,8 +10,8 @@ import {
   Typography,
   CircularProgress
 } from '@material-ui/core';
-import LockIcon from '@material-ui/icons/LockOutlined';
 import withStyles from '@material-ui/core/styles/withStyles';
+import logo from '../../images/logo.svg';
 
 const styles = theme => ({
   layout: {
@@ -32,10 +32,6 @@ const styles = theme => ({
     alignItems: 'center',
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`
   },
-  avatar: {
-    margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main
-  },
   form: {
     width: '100%',
     marginTop: theme.spacing.unit * 3
@@ -51,6 +47,12 @@ const styles = theme => ({
     position: 'absolute',
     top: '50%',
     left: '90%'
+  },
+  avatar: {
+    background: '#fff',
+    '& img': {
+      width: '100%'
+    }
   }
 });
 
@@ -61,7 +63,7 @@ const LoginForm = props => {
     <main className={classes.layout}>
       <Paper className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockIcon />
+          <img src={logo} alt='Wolfgang Logo' />
         </Avatar>
         <Typography component='h1' variant='h5'>
           Login
