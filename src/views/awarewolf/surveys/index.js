@@ -56,7 +56,11 @@ class Surveys extends Component {
 
       if (surveyData && surveyData.success) {
         this.setState({
-          surveys: surveyData.data.map(n => {
+          surveys: surveyData.data.filter(survey => {
+            if (!user.roles.includes('manager')) {
+              return false;
+            }
+          }).map(n => {
             const  completion = (userData && userData.success) ? 
               ((n.userResponses.length / userData.data.length) * 100).toFixed(2) : 
               'Unavailable'
