@@ -54,8 +54,6 @@ class Surveys extends Component {
       clearTimeout(this.timer);
       this.setState({ loading: false });
 
-      console.log(user);
-
       if (surveyData && surveyData.success) {
         this.setState({
           surveys: surveyData.data.filter(() => user.roles.includes('manager')).map(n => {
